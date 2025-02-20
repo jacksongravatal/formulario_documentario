@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro - Projeto Documentário</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-image: url('caminho-para-imagem-de-fundo.jpg'); background-size: cover; background-repeat: no-repeat; }
+        .form-section { margin-bottom: 20px; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 8px; }
+        .form-section h2 { margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; margin-top: 10px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea { width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; }
+        .button-container { text-align: right; }
+        button { padding: 10px 20px; font-size: 1em; cursor: pointer; background-color: #0288D1; color: white; border: none; border-radius: 5px; }
+        .hidden { display: none; }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tipoId = document.getElementById('tipo_id');
+            const cpfDiv = document.getElementById('cpf');
+            const cnpjDiv = document.getElementById('cnpj');
+            const nomeCompletoDiv = document.getElementById('nomeCompleto');
+            const razaoSocialDiv = document.getElementById('razaoSocial');
+            const pronomesDiv = document.getElementById('pronomes');
+
+            tipoId.addEventListener('change', function() {
+                cpfDiv.style.display = tipoId.value === 'cpf' ? 'block' : 'none';
+                cnpjDiv.style.display = tipoId.value === 'cnpj' ? 'block' : 'none';
+                nomeCompletoDiv.style.display = 'none';
+                razaoSocialDiv.style.display = 'none';
+                pronomesDiv.style.display = 'none';
+            });
+
+            const cpfInput = document.getElementById('cpfField');
+            cpfInput.addEventListener('blur', function() {
+                const isValidCPF = /^\d{11}$/.test(cpfInput.value);
+                nomeCompletoDiv.style.display = isValidCPF ? 'block' : 'none';
+            });
+
+            const nomeInput = document.getElementById('nome');
+            nomeInput.addEventListener('blur', function() {
+                const hasNome = nomeInput.value.trim() !== '';
+                pronomesDiv.style.display = hasNome ? 'block' : 'none';
+            });
+
+            document.getElementById('estado').addEventListener('change', function() {
+                const estado = this.value;
+                mostrarMunicipios(estado);
+            });
+
+            function mostrarMunicipios(estado) {
+                const municipiosSelect = document.getElementById('municipio');
+                municipiosSelect.innerHTML = ''; // Limpa os municípios anteriores
+                const municipios = {
+                    AC: ["Município1", "Município2"],
+                    AL: ["Município1", "Município2"],
+                    AP: ["Município1", "Município2"],
+                };
+
+                if (municipios[estado]) {
+                    municipios[estado].forEach(function(municipio) {
+                        const option = document.createElement('option');
+                        option.value = municipio;
+                        option.textContent = municipio;
+                        municipiosSelect.appendChild(option);
+                    });
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <form>
+<h2> ALÉM DO DIAGHNÓSTICO: A lutra contra o Tempo e a Dor!</h2>
+        <!-- Identificação -->
+        <div class="form-section">
+            <h2> 1 Identificação</h2>
+            <div class="form-group">
+                <label for="tipo_id">Tipo de Identificação:</label>
+                <select id="tipo_id" name="tipo_id">
+                    <option value="">Selecione</option>
+                    <option value="cpf">CPF</option>
+                    <option value="cnpj">CNPJ</option>
+                </select>
+            </div>
+            <div id="cpf" class="form-group hidden">
+                <label for="cpfField">CPF:</label>
+                <input type="text" id="cpfField" name="cpf" placeholder="Apenas números">
+            </div>
+            <div id="cnpj" class="form-group hidden">
+                <label for="cnpjField">CNPJ:</label>
+                <input type="text" id="cnpjField" name="cnpj" placeholder="Apenas números">
+            </div>
+            <div id="nomeCompleto" class="form-group hidden">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome">
+            </div>
+            <div id="razaoSocial" class="form-group hidden">
+                <label for="razao_social">Razão Social:</label>
+                <input type="text" id="razao_social" name="razao_social">
+            </div>
+            <div id="pronomes" class="form-group hidden">
+                <label for="pronome">Pronomes:</label>
+                <select id="pronome" name="pronome">
+                    <option value="">Selecione</option>
+                    <option value="ele">Ele/Dele</option>
+                    <option value="ela">Ela/Dela</option>
+                    <option value="elu">Elu/Delu</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Endereço -->
+        <div class="form-section">
+            <h2> 2 - Endereço</h2>
+            <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" placeholder="CEP" required>
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" placeholder="Endereço" required>
+            </div>
+            <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input type="text" id="bairro" name="bairro" placeholder="Bairro" required>
+            </div>
+            <div class="form-group">
+                <label for="referencia">Ponto de Referência/Complemento:</label>
+                <input type="text" id="referencia" name="referencia" placeholder="Referência ou Complemento">
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="">Selecione</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="municipio">Município:</label>
+                <input type="text" id="municipio" name="municipio" placeholder="Digite o município" required>
+            </div>
+        </div>
+
+<!-- Contato -->
+        <div class="form-section">
+            <h2> 3 - Contato</h2>
+            <div class="form-group">
+                <label for="telefone_celular">Telefone Celular:</label>
+                <input type="tel" id="telefone_celular" name="telefone_celular" placeholder="(xx) xxxxx-xxxx" required>
+            </div>
+            <div class="form-group">
+                <label>É WhatsApp?</label>
+                <div class="form-check">
+                    <input type="radio" id="whatsapp_sim" name="whatsapp_opcao" value="sim" required>
+                    <label for="whatsapp_sim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="whatsapp_nao" name="whatsapp_opcao" value="nao">
+                    <label for="whatsapp_nao">Não</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="telefone_comercial">Telefone Comercial (Opcional):</label>
+                <input type="tel" id="telefone_comercial" name="telefone_comercial" placeholder="(xx) xxxxx-xxxx">
+            </div>
+            <div class="form-group">
+                <label for="telefone_residencial">Telefone Residencial (Opcional):</label>
+                <input type="tel" id="telefone_residencial" name="telefone_residencial" placeholder="(xx) xxxx-xxxx">
+            </div>
+            <div class="form-group">
+                <label for="contato_emergencia_nome">Contato de Emergência:</label>
+                <input type="text" id="contato_emergencia_nome" name="contato_emergencia_nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="contato_emergencia_telefone">Telefone do Contato de Emergência:</label>
+                <input type="tel" id="contato_emergencia_telefone" name="contato_emergencia_telefone" placeholder="(xx) xxxxx-xxxx" required>
+            </div>
+            <div class="form-group">
+                <label for="email_pessoal">E-mail Pessoal:</label>
+                <input type="email" id="email_pessoal" name="email_pessoal" required>
+            </div>
+        </div>
+
+        <!-- Equipe de Produção -->
+        <div class="form-section">
+            <h2> 4 - Equipe de Produção</h2>
+            <div class="form-group">
+                <label for="cargo">Cargo:</label>
+                <select id="cargo" name="cargo" required>
+                    <option value="">Selecione</option>
+                    <option value="produtor_geral">Produtor Geral</option>
+                    <option value="produtor_executivo">Produtor Executivo</option>
+                    <option value="supervisor_conteudo">Supervisor de Conteúdo</option>
+                    <option value="produtor_captacao">Produtor de Captação de Recursos</option>
+                    <option value="roteirista">Roteirista</option>
+                    <option value="diretor">Diretor</option>
+                    <option value="diretor_fotografia">Diretor de Fotografia</option>
+                    <option value="cinegrafistas">Cinegrafistas</option>
+                    <option value="operadores_som">Operadores de Som</option>
+                    <option value="editor_video">Editor de Vídeo</option>
+                    <option value="designer_grafico">Designer Gráfico/Motion Designer</option>
+                    <option value="social_media">Social Media</option>
+                    <option value="coordenador_logistica">Coordenador de Logística</option>
+                    <option value="coordenador_divulgacao">Coordenador de Divulgação Universitária</option>
+                    <option value="motorista">Motorista</option>
+                    <option value="estagiario">Estagiário</option>
+                    <option value="auxiliar_administrativo">Auxiliar Administrativo</option>
+                </select>
+            </div>
+            <div id="responsabilidades" class="form-group hidden">
+                <h3>Responsabilidades:</h3>
+                <p id="descricao_cargo"></p>
+            </div>
+            <div class="form-group">
+                <label for="concorda">Você concorda com as responsabilidades e atribuições?</label>
+                <select id="concorda" name="concorda" required>
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                </select>
+            </div>
+        </div>
+      
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cargoSelect = document.getElementById('cargo');
+            const descricaoCargo = document.getElementById('descricao_cargo');
+            const responsabilidadesDiv = document.getElementById('responsabilidades');
+
+            cargoSelect.addEventListener('change', function() {
+                const cargo = cargoSelect.value;
+                const descricoes = {
+                    produtor_geral: "Supervisão geral, decisões estratégicas, aprovação de orçamentos e parcerias.",
+                    produtor_executivo: "Gestão financeira, organização da produção, supervisão do cronograma e logística.",
+                    supervisor_conteudo: "Análise e revisão de roteiros, ajustes na estrutura narrativa, acompanhamento de gravações.",
+                    produtor_captacao: "Elaboração e submissão do projeto à Lei Rouanet, gestão de prestação de contas, busca de patrocínios.",
+                    roteirista: "Desenvolvimento de roteiros detalhados, estruturação de entrevistas.",
+                    diretor: "Coordenação da equipe de gravação, definição da linguagem audiovisual.",
+                    diretor_fotografia: "Definição de iluminação, enquadramentos e estética visual.",
+                    cinegrafistas: "Operação de câmeras, captação de imagens.",
+                    operadores_som: "Captação de áudio, eliminação de ruídos.",
+                    editor_video: "Montagem dos episódios, aplicação de cortes e transições.",
+                    designer_grafico: "Desenvolvimento de identidade visual, criação de animações e infográficos.",
+                    social_media: "Gerenciamento de redes sociais, criação de conteúdo promocional.",
+                    coordenador_logistica: "Coordenação de viagens, hospedagem e transporte local.",
+                    coordenador_divulgacao: "Parcerias com universidades, organização de exibições e debates.",
+                    motorista: "Dirigir durante as gravações e fazer pequenas corridas durante as produções.",
+                    estagiario: "Auxiliar na produção e execução.",
+                    auxiliar_administrativo: "Auxiliar em tarefas administrativas e organização."
+                };
+
+                if (descricoes[cargo]) {
+                    descricaoCargo.textContent = descricoes[cargo];
+                    responsabilidadesDiv.style.display = 'block';
+                } else {
+                    responsabilidadesDiv.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+          <!-- Redes Sociais -->
+        <div class="form-section">
+            <h2> 5 - Redes Sociais</h2>
+            <p>Você utiliza redes sociais?</p>
+            <div class="form-group">
+                <label>
+                    <input type="radio" name="usar_redes_sociais" value="sim" onchange="toggleRedesSociais(true)"> Sim
+                </label>
+                <label>
+                    <input type="radio" name="usar_redes_sociais" value="nao" onchange="toggleRedesSociais(false)"> Não
+                </label>
+            </div>
+
+            <div id="redes-sociais-opcoes" class="hidden">
+                <p>Selecione as redes sociais que você utiliza:</p>
+                <div class="checkbox-group">
+                    <!-- Facebook -->
+                    <label>
+                        <input type="checkbox" onclick="toggleCampo('facebook-link')"> Facebook
+                    </label>
+                    <input type="url" id="facebook-link" class="hidden" placeholder="Cole o link do perfil no Facebook">
+                    <p class="instructions hidden" id="facebook-instructions">
+                        Como encontrar: <a href="https://www.facebook.com/me" >clique aqui</a>.
+                    </p>
+
+                    <!-- Instagram -->
+                    <label>
+                        <input type="checkbox" onclick="toggleCampo('instagram-link')"> Instagram
+                    </label>
+                    <input type="url" id="instagram-link" class="hidden" placeholder="Cole o link do perfil no Instagram">
+                    <p class="instructions hidden" id="instagram-instructions">
+                        Como encontrar: <a href="https://www.instagram.com/" >clique aqui</a>.
+                    </p>
+
+                    <!-- Twitter -->
+                    <label>
+                        <input type="checkbox" onclick="toggleCampo('twitter-link')"> X (Twitter)
+                    </label>
+                    <input type="url" id="twitter-link" class="hidden" placeholder="Cole o link do perfil no Twitter">
+                    <p class="instructions hidden" id="twitter-instructions">
+                        Como encontrar: <a href="https://twitter.com/" >clique aqui</a>.
+                    </p>
+
+                    <!-- LinkedIn -->
+                    <label>
+                        <input type="checkbox" onclick="toggleCampo('linkedin-link')"> LinkedIn
+                    </label>
+                    <input type="url" id="linkedin-link" class="hidden" placeholder="Cole o link do perfil no LinkedIn">
+                    <p class="instructions hidden" id="linkedin-instructions">
+                        Como encontrar: <a href="https://www.linkedin.com/" >clique aqui</a>.
+                    </p>
+
+                    <!-- TikTok -->
+                    <label>
+                        <input type="checkbox" onclick="toggleCampo('tiktok-link')"> TikTok
+                    </label>
+                    <input type="url" id="tiktok-link" class="hidden" placeholder="Cole o link do perfil no TikTok">
+                    <p class="instructions hidden" id="tiktok-instructions">
+                        Como encontrar: <a href="https://www.tiktok.com/" >clique aqui</a>.
+                    </p>
+
+                    <!-- YouTube -->
+                    <label>
+                        <input type="checkbox" onclick="toggleCampo('youtube-link')"> YouTube
+                    </label>
+                    <input type="url" id="youtube-link" class="hidden" placeholder="Cole o link do perfil no YouTube">
+                    <p class="instructions hidden" id="youtube-instructions">
+                        Como encontrar: <a href="https://www.youtube.com/" >clique aqui</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+      
+    <script>
+        // Controla exibição da seção de redes sociais
+        function toggleRedesSociais(mostrar) {
+            const section = document.getElementById('redes-sociais-opcoes');
+            if (mostrar) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+                clearFields(); // Limpa os campos, se "Não" for selecionado
+            }
+        }
+
+        // Exibe/oculta campos e instruções de redes sociais
+        function toggleCampo(id) {
+            const campo = document.getElementById(id);
+            const instructions = document.getElementById(`${id}-instructions`);
+            if (campo.classList.contains('hidden')) {
+                campo.classList.remove('hidden');
+                instructions.classList.remove('hidden');
+            } else {
+                campo.classList.add('hidden');
+                instructions.classList.add('hidden');
+                campo.value = ''; // Limpa o valor
+            }
+        }
+
+        // Limpa todos os campos de redes sociais
+        function clearFields() {
+            const campos = document.querySelectorAll('input[type="url"]');
+            const instrucoes = document.querySelectorAll('.instructions');
+            campos.forEach(campo => campo.value = '' && campo.classList.add('hidden'));
+            instrucoes.forEach(instrucao => instrucao.classList.add('hidden'));
+        }
+    </script>
+</body>
+</html>
+
+    <script>
+        function toggleRedesSociais(mostrar) {
+            const section = document.getElementById('redes-sociais-opcoes');
+            if (mostrar) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+                limparTodosOsCampos();
+            }
+        }
+
+        function toggleCampo(inputId) {
+            const input = document.getElementById(inputId);
+            if (input.classList.contains('hidden')) {
+                input.classList.remove('hidden');
+            } else {
+                input.classList.add('hidden');
+                input.value = '';
+            }
+        }
+
+        function limparTodosOsCampos() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const campos = document.querySelectorAll('input[type="url"]');
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            campos.forEach(campo => {
+                campo.classList.add('hidden');
+                campo.value = '';
+            });
+        }
+    </script>
+</body>
+</html>
+
+        <!-- Perguntas de Saúde -->
+        <div class="form-section">
+            <h2> 6 - Sobre Sua Saúde</h2>
+            <div class="form-group">
+                <label for="tipo-sanguineo">Qual é o seu tipo sanguíneo?</label>
+                <select id="tipo-sanguineo" name="tipo-sanguineo" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="restricoes-alimentares">Possui alguma restrição alimentar?</label>
+                <textarea id="restricoes-alimentares" name="restricoes-alimentares" placeholder="Informe, caso possua"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="saude-adicional">Alguma informação sobre sua saúde que carece de atenção?</label>
+                <textarea id="saude-adicional" name="saude-adicional" placeholder="Informe, caso necessário"></textarea>
+            </div>
+        </div>
+
+        <!-- Questões Gerais -->
+        <div class="form-section">
+            <h2> 7 - Questões Gerais</h2>
+            <div class="form-group">
+                <label for="local-projeto">Onde você irá contribuir com o projeto?</label>
+                <select id="local-projeto" name="local-projeto" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="brasilia">Brasília</option>
+                    <option value="santa-catarina">Santa Catarina</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="viagem">Possui disponibilidade para viajar, se necessário?</label>
+                <textarea id="viagem" name="viagem" placeholder="Informe sua disponibilidade"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="compromissos-2025">Algum compromisso assumido em 2025?</label>
+                <textarea id="compromissos-2025" name="compromissos-2025" placeholder="De quando a quando (se aplicável)"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Qual é sua disponibilidade de horários/turnos para contribuir com o projeto?</label>
+                <textarea name="disponibilidade" placeholder="Ex.: Manhã, tarde, noite ou dias específicos"></textarea>
+            </div>
+        </div>
+
+     <div class="terms-section">
+            <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro - Projeto Documentário</title>
+    <style>
+        /* ... (estilos existentes) ... */
+    </style>
+    <script>
+        // ... (scripts existentes) ...
+    </script>
+</head>
+<body>
+
+    <form>
+        <!-- ... (seções anteriores do formulário) ... -->
+
+        <div class="terms-section">
+            <h2>8 Termos e Condições</h2>
+            <p>Para finalizar o cadastro, é necessário o aceite dos termos abaixo. O preenchimento completo desta ficha, incluindo informações sobre deslocamento e outras informações relevantes, é essencial para garantirmos a segurança e o bom andamento do projeto.</p>
+
+            <h3>Termo de Direito de Imagem</h3>
+            <p>Este termo garante que as imagens captadas durante o projeto serão utilizadas de forma responsável e ética, respeitando sua privacidade e individualidade.  A cessão de imagem não se trata de uma transferência irrestrita de direitos, mas sim de uma autorização para uso em contextos específicos relacionados ao documentário.</p>
+            <a class="download-link" href="termo_imagem.pdf" >Fazer download do Termo de Direito de Imagem</a>
+            <div class="file-upload">
+                <label for="upload_termo_imagem">Enviar Termo de Direito de Imagem Assinado:</label>
+                <input type="file" id="upload_termo_imagem" name="upload_termo_imagem" accept=".pdf, .jpg, .jpeg, .png">
+            </div>
+
+            <h3>Termo de Confiabilidade</h3>
+            <p>Este termo assegura que as informações compartilhadas conosco serão tratadas com confidencialidade e utilizadas exclusivamente para os fins do projeto.  A sua colaboração é fundamental para a construção de um documentário autêntico e impactante, e a sua confiança é a base dessa parceria.</p>
+            <a class="download-link" href="termo_confiabilidade.pdf" >Fazer download do Termo de Confiabilidade</a>
+            <div class="file-upload">
+                <label for="upload_termo_confiabilidade">Enviar Termo de Confiabilidade Assinado:</label>
+                <input type="file" id="upload_termo_confiabilidade" name="upload_termo_confiabilidade" accept=".pdf, .jpg, .jpeg, .png">
+            </div>
+
+            <h3>Termo de Utilização do E-mail Institucional</h3>
+            <p>Este termo define as diretrizes para a comunicação por e-mail, garantindo que você receba informações relevantes sobre o projeto de forma clara e organizada.  O e-mail institucional será utilizado para comunicados oficiais, convites para eventos e outras informações importantes.</p>
+            <a class="download-link" href="termo_email.pdf" >Fazer download do Termo de Utilização do E-mail Institucional</a>
+            <div class="file-upload">
+                <label for="upload_termo_email">Enviar Termo de Utilização do E-mail Assinado:</label>
+                <input type="file" id="upload_termo_email" name="upload_termo_email" accept=".pdf, .jpg, .jpeg, .png">
+            </div>
+
+        </div>
+
+        <div class="lgpd-section">
+            <h2>9 Lei Geral de Proteção de Dados (LGPD)</h2>
+            <p>Informamos que seus dados serão tratados de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).  As informações coletadas serão utilizadas exclusivamente para os fins do projeto e não serão compartilhadas com terceiros sem o seu consentimento.  Você tem o direito de acessar, retificar e excluir seus dados, conforme previsto na LGPD.</p>
+        </div>
+
+
+        <!-- ... (Botão de envio do formulário) ... -->
+
+    </form>
+
+    <script>
+        // ... (scripts existentes) ...
+    </script>
+
+</body>
+</html>
+
+
+        </div>
+
+        <!-- ... (Botão de envio do formulário) ... -->
+
+    </form>
+
+    <script>
+        // ... (scripts existentes) ...
+    </script>
+
+</body>
+</html>
+
+ <!-- Botão de Envio -->
+        <div class="button-container">
+            <button type="submit">Enviar Cadastro</button>
+        </div>
+    </form>
